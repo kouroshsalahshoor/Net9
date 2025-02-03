@@ -10,3 +10,12 @@
 @using SportsStore.Auto
 @using SportsStore.Auto.Client
 @using SportsStore.Auto.Components
+
+@using SportsStore.Auto.Client.Models
+@using SportsStore.Auto.Data
+
+@using Microsoft.EntityFrameworkCore
+
+@inherits OwningComponentBase<ApplicationDbContext>
+@inject IJSRuntime _js
+@inject NavigationManager _navigationManager
