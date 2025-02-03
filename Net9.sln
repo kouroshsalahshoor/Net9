@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsStore.Auto", "SportsStore.Auto\SportsStore.Auto\SportsStore.Auto.csproj", "{3E433002-0BE0-41E8-BA68-589FD0C3CF43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsStore.Auto.Client", "SportsStore.Auto\SportsStore.Auto.Client\SportsStore.Auto.Client.csproj", "{851BEBF2-4CA0-4B1A-9583-A4C8FB9CE01E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E433002-0BE0-41E8-BA68-589FD0C3CF43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E433002-0BE0-41E8-BA68-589FD0C3CF43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E433002-0BE0-41E8-BA68-589FD0C3CF43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E433002-0BE0-41E8-BA68-589FD0C3CF43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{851BEBF2-4CA0-4B1A-9583-A4C8FB9CE01E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{851BEBF2-4CA0-4B1A-9583-A4C8FB9CE01E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{851BEBF2-4CA0-4B1A-9583-A4C8FB9CE01E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{851BEBF2-4CA0-4B1A-9583-A4C8FB9CE01E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
