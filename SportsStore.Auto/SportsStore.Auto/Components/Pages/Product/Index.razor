@@ -37,26 +37,27 @@
 
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-            <a class="page-link" href="#" aria-label="First">
+        <li class="page-item @(_page <=1 ? "disabled" : "")">
+            <a class="page-link" href="@($"{_url}/page/1")" aria-label="First">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
+        <li class="page-item @(_page <=1 ? "disabled" : "")">
+            <a class="page-link" href="@($"{_url}/page/{(_page-1)}")" aria-label="Previous">
                 <span aria-hidden="true">&lsaquo;</span>
             </a>
         </li>
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
+        @for (int i = 1; i <= _pages; i++)
+        {
+            <li class="page-item @(i==_page ? "active" : "")"><a class="page-link" href="@($"{_url}/page/{@i}")">@i</a></li>
+        }
+        <li class="page-item @(_page >= _pages ? "disabled" : "")">
+            <a class="page-link" href="@($"{_url}/page/{(_page+1)}")" aria-label="Next">
                 <span aria-hidden="true">&rsaquo;</span>
             </a>
         </li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Last">
+        <li class="page-item @(_page >= _pages ? "disabled" : "")">
+            <a class="page-link" href="@($"{_url}/page/{@_pages}")" aria-label="Last">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
@@ -73,9 +74,12 @@
 
     // private string? _category;
 
-    private int _pageSize = 4;
+    private int _pageSize = 3;
     private int _page = 1;
     private int _total = 0;
+    private int _pages = 0;
+
+    private string _url = "products";
 
 
     // public class PagingInfo
@@ -89,18 +93,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _total = await _efStoreRepository.Products.CountAsync();
         _categories = await _efStoreRepository.Products.Select(p => p.Category).Distinct().ToListAsync();
     }
+
     override protected async Task OnParametersSetAsync()
     {
         _page = Page < 1 ? 1 : Page;
 
-        // _total = await _efStoreRepository.Products.CountAsync();
-        // _categories = await _efStoreRepository.Products.Select(p => p.Category).Distinct().ToListAsync();
-
-        _items = await _efStoreRepository.Products
-        .Where(p => Category == null || p.Category == Category)
-        .OrderBy(p => p.Id).Skip((_page - 1) * _pageSize).Take(_pageSize).ToListAsync();
+        _url = string.IsNullOrEmpty(Category) ? "products" : $"products/{Category}";
+        
+        var query = _efStoreRepository.Products.Where(p => Category == null || p.Category == Category);
+        _total = await query.CountAsync();
+        _pages = (int)Math.Ceiling((decimal)_total / _pageSize);
+        _items = await query.OrderBy(p => p.Id).Skip((_page - 1) * _pageSize).Take(_pageSize).ToListAsync();
     }
 }
