@@ -27,18 +27,18 @@
             @foreach (var item in _items!)
             {
                 <tr class="@getClass(item?.Location?.City)">
-                    <td>@item.Id</td>
-                    <td>@item.Surname, @item.Firstname</td>
-                    <td>@item.Department?.Name</td>
-                    <td>@item.Location?.City</td>
+                    <td>@item?.Id</td>
+                    <td>@item?.Surname, @item?.Firstname</td>
+                    <td>@item?.Department?.Name</td>
+                    <td>@item?.Location?.City</td>
                     <td class="text-center">
-                        <a class="btn btn-sm btn-info" href="person/@item.Id">
+                        <a class="btn btn-sm btn-info" href="person/@item?.Id">
                             Details
                         </a>
-                        <a class="btn btn-sm btn-warning" href="person/update/@item.Id">
+                        <a class="btn btn-sm btn-warning" href="person/update/@item?.Id">
                             Update
                         </a>
-                        <button class="btn btn-sm btn-danger" @onclick="@(async () => await delete(item))">
+                        <button class="btn btn-sm btn-danger" @onclick="@(async () => await delete(item!))">
                             Delete
                         </button>
                     </td>

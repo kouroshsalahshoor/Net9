@@ -15,7 +15,10 @@
 @using SportsStore.Auto.Data
 
 @using Microsoft.EntityFrameworkCore
+@using SportsStore.Auto.Repository
 
 @inherits OwningComponentBase<ApplicationDbContext>
 @inject IJSRuntime _js
 @inject NavigationManager _navigationManager
+
+@inject IStoreRepository _efStoreRepository
