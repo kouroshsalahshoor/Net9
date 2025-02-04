@@ -13,7 +13,7 @@ namespace SportsStore.Auto.Data
         public static async Task CreateAdminAccountAsync(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             serviceProvider = serviceProvider.CreateScope().ServiceProvider;
-            UserManager<IdentityUser> userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            UserManager<ApplicationUser> userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             RoleManager<IdentityRole> roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             string username = configuration["Data:AdminUser:Name"] ?? "admin";
@@ -27,7 +27,7 @@ namespace SportsStore.Auto.Data
                     await roleManager.CreateAsync(new IdentityRole(Constants.Role_Admins));
                     await roleManager.CreateAsync(new IdentityRole(Constants.Role_Users));
                 }
-                IdentityUser user = new IdentityUser
+                ApplicationUser user = new ApplicationUser
                 {
                     UserName = username,
                     Email = email

@@ -30,7 +30,8 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityCookies();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(opts => {
+builder.Services.AddDbContext<ApplicationDbContext>(opts =>
+{
     opts.UseSqlServer(connectionString);
     opts.EnableSensitiveDataLogging(true);
 });
@@ -41,13 +42,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddRoleManager<RoleManager<IdentityRole>>()
+    .AddUserManager<UserManager<ApplicationUser>>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
-builder.Services.Configure<IdentityOptions>(options => {
+builder.Services.Configure<IdentityOptions>(options =>
+{
     options.Password.RequiredLength = 1;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireLowercase = false;
@@ -66,7 +69,7 @@ builder.Services.Configure<IdentityOptions>(options => {
     //options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 });
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7228/api/") }); 
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7228/api/") });
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
@@ -106,8 +109,9 @@ app.MapRazorComponents<App>()
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
 
-var context = app.Services.CreateScope().ServiceProvider
- .GetRequiredService<ApplicationDbContext>();
+var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
 SeedData.EnsurePopulated(context);
+
+IdentitySeedData.CreateAdminAccount(app.Services, app.Configuration);
 
 app.Run();
