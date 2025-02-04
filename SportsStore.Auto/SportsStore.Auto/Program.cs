@@ -5,6 +5,7 @@ using SportsStore.Auto.Client.Pages;
 using SportsStore.Auto.Components;
 using SportsStore.Auto.Components.Account;
 using SportsStore.Auto.Data;
+using SportsStore.Auto.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7228/api/") });
 builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
 
 var app = builder.Build();
 
