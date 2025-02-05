@@ -11,6 +11,7 @@
             <th>Item</th>
             <th class="text-right">Price</th>
             <th class="text-right">Subtotal</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -22,6 +23,11 @@
                 <td class="text-right">@line.Product.Price.ToString("c")</td>
                 <td class="text-right">
                     @((line.Quantity * line.Product.Price).ToString("c"))
+                </td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-danger" @onclick="@(async ()=> await remove(line.Product))">
+                        Remove
+                    </button>
                 </td>
             </tr>
         }
@@ -59,5 +65,11 @@
             await _cartService.Load();
             StateHasChanged();
         }
+    }
+
+    private async Task remove(Product product)
+    {
+        await _cartService.RemoveLine(product);
+        StateHasChanged();
     }
 }

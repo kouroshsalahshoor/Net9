@@ -21,18 +21,22 @@ namespace SportsStore.Auto.Client.Services
         public override async Task AddItem(Product product, int quantity)
         {
             await base.AddItem(product, quantity);
-            await _protectedLocalStorage.SetAsync("cart", Lines);
+            await setStorage();
         }
         public override async Task RemoveLine(Product product)
         {
             await base.RemoveLine(product);
-            await _protectedLocalStorage.SetAsync("cart", Lines);
+            await setStorage();
         }
 
         public override async Task Clear()
         {
             await base.Clear();
             await _protectedLocalStorage.DeleteAsync("cart");
+        }
+        private async Task setStorage()
+        {
+            await _protectedLocalStorage.SetAsync("cart", Lines);
         }
     }
 }
