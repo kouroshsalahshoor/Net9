@@ -1,6 +1,4 @@
-﻿using SportsStore.Auto.Client.Models;
-
-namespace SportsStore.Auto.Client.Services
+﻿namespace SportsStore.Auto.Client.Models
 {
     public class CartLine
     {

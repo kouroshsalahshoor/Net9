@@ -1,6 +1,6 @@
 ﻿using SportsStore.Auto.Client.Models;
 
-namespace SportsStore.Auto.Client.Services
+namespace SportsStore.Auto.Services
 {
     public class CartService
     {
@@ -35,7 +35,8 @@ namespace SportsStore.Auto.Client.Services
         public decimal ComputeTotalValue() => Lines.Sum(e => e.Product.Price * e.Quantity);
         public virtual async Task Clear() => Lines.Clear();
         public virtual async Task Load() { }
-        public async Task setSummary() {
+        public async Task setSummary()
+        {
             SummaryString = $"{Lines.Sum(x => x.Quantity)} item(s), Total: {ComputeTotalValue():C2}";
         }
 

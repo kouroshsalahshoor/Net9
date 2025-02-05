@@ -8,6 +8,7 @@ using SportsStore.Auto.Components.Account;
 using SportsStore.Auto.Components.Pages.Demos.StateContainer;
 using SportsStore.Auto.Data;
 using SportsStore.Auto.Repository;
+using SportsStore.Auto.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

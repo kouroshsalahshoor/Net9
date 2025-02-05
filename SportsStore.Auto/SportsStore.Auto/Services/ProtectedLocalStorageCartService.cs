@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using SportsStore.Auto.Client.Models;
 
-namespace SportsStore.Auto.Client.Services
+namespace SportsStore.Auto.Services
 {
     public class ProtectedLocalStorageCartService : CartService
     {
