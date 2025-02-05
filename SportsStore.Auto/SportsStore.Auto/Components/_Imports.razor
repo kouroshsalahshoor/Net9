@@ -9,13 +9,14 @@
 @using Microsoft.JSInterop
 @using SportsStore.Auto
 @using SportsStore.Auto.Client
+@using SportsStore.Auto.Client.Services
 @using SportsStore.Auto.Components
 
 @using SportsStore.Auto.Client.Models
 @using SportsStore.Auto.Data
+@using SportsStore.Auto.Repository
 
 @using Microsoft.EntityFrameworkCore
-@using SportsStore.Auto.Repository
 
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @inject ProtectedLocalStorage _protectedLocalStorage
@@ -25,3 +26,4 @@
 @inject NavigationManager _navigationManager
 
 @inject IStoreRepository _efStoreRepository
+@inject CartService _cartService

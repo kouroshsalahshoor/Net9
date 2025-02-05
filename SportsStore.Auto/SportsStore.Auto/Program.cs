@@ -77,6 +77,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
 
 builder.Services.AddScoped<LocalStorageService>();
+builder.Services.AddScoped<CartService, ProtectedLocalStorageCartService>();
 
 var app = builder.Build();
 

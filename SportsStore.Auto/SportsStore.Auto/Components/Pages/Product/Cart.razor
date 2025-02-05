@@ -14,7 +14,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var line in _cart?.Lines ?? Enumerable.Empty<CartLine>())
+        @foreach (var line in _cartService?.Lines ?? Enumerable.Empty<CartLine>())
         {
             <tr>
                 <td class="text-center">@line.Quantity</td>
@@ -30,7 +30,7 @@
         <tr>
             <td colspan="3" class="text-right">Total:</td>
             <td class="text-right">
-                @_cart?.ComputeTotalValue().ToString("c")
+                @_cartService?.ComputeTotalValue().ToString("c")
             </td>
         </tr>
     </tfoot>
@@ -43,7 +43,7 @@
     private string _title = "Cart";
     private bool _connected;
 
-    private Cart? _cart { get; set; }
+    // private Cart? _cart { get; set; }
     [SupplyParameterFromQuery(Name = "returnUrl")]
     private string _returnUrl { get; set; } = "/";
 
@@ -56,15 +56,8 @@
         if (firstRender)
         {
             _connected = true;
-            
-            // _returnUrl = _returnUrl ?? "/";
-            await LoadStateAsync();
+            await _cartService.Load();
             StateHasChanged();
         }
-    }
-    private async Task LoadStateAsync()
-    {
-        var result = await _protectedLocalStorage.GetAsync<Cart>("cart");
-        _cart = result.Success ? result.Value : new Cart();
     }
 }

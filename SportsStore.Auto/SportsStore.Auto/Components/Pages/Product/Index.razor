@@ -86,7 +86,7 @@
     private string _url = "products";
 
     private bool _connected;
-    private Cart? _cart { get; set; }
+    // private Cart? _cart { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -97,16 +97,11 @@
         if (firstRender)
         {
             _connected = true;
-            await LoadStateAsync();
+            await _cartService.Load();
             StateHasChanged();
         }
     }
-    private async Task LoadStateAsync()
-    {
-        var result = await _protectedLocalStorage.GetAsync<Cart>("cart");
-        _cart = result.Success ? result.Value : new Cart();
-    }
-
+    
     override protected async Task OnParametersSetAsync()
     {
         _page = Page < 1 ? 1 : Page;
@@ -123,8 +118,8 @@
     {
         if (product != null)
         {
-            _cart!.AddItem(product, 1);
-            await _protectedLocalStorage.SetAsync("cart", _cart);
+            _cartService!.AddItem(product, 1);
+            await _protectedLocalStorage.SetAsync("cart", _cartService.Lines);
             _navigationManager.NavigateTo($"cart?returnUrl={_navigationManager.ToBaseRelativePath(_navigationManager.Uri)}");
         }
     }
