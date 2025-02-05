@@ -1,4 +1,5 @@
 # Net9
+Pure Blazor Web (.Net 9) version of Adam Freeman's SportsSore
 
 ### References
 #### State Management
