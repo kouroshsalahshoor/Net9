@@ -16,6 +16,8 @@ namespace SportsStore.Auto.Client.Services
         {
             var result = await _protectedLocalStorage.GetAsync<List<CartLine>>("cart");
             Lines = result.Success ? result.Value! : new List<CartLine>();
+
+            await setSummary();
         }
 
         public override async Task AddItem(Product product, int quantity)
@@ -33,10 +35,12 @@ namespace SportsStore.Auto.Client.Services
         {
             await base.Clear();
             await _protectedLocalStorage.DeleteAsync("cart");
+            await setSummary();
         }
         private async Task setStorage()
         {
             await _protectedLocalStorage.SetAsync("cart", Lines);
+            await setSummary();
         }
     }
 }

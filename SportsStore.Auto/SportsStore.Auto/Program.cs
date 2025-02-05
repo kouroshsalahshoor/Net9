@@ -5,6 +5,7 @@ using SportsStore.Auto.Client.Pages;
 using SportsStore.Auto.Client.Services;
 using SportsStore.Auto.Components;
 using SportsStore.Auto.Components.Account;
+using SportsStore.Auto.Components.Pages.Demos.StateContainer;
 using SportsStore.Auto.Data;
 using SportsStore.Auto.Repository;
 
@@ -78,6 +79,7 @@ builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
 
 builder.Services.AddScoped<LocalStorageService>();
 builder.Services.AddScoped<CartService, ProtectedLocalStorageCartService>();
+builder.Services.AddScoped<StateContainer>();
 
 var app = builder.Build();
 

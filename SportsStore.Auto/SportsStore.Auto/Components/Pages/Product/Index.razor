@@ -6,6 +6,8 @@
 @* click did not work without it!!! *@
 @rendermode InteractiveServer
 
+@implements IDisposable
+
 <PageTitle>@_title</PageTitle>
 
 <div class="text-center">
@@ -91,6 +93,8 @@
     protected override async Task OnInitializedAsync()
     {
         _categories = await _efStoreRepository.Products.Select(p => p.Category).Distinct().ToListAsync();
+
+        _cartService.OnChange += StateHasChanged;
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -118,9 +122,14 @@
     {
         if (product != null)
         {
-            _cartService!.AddItem(product, 1);
+            await _cartService!.AddItem(product, 1);
             await _protectedLocalStorage.SetAsync("cart", _cartService.Lines);
             _navigationManager.NavigateTo($"cart?returnUrl={_navigationManager.ToBaseRelativePath(_navigationManager.Uri)}");
         }
+    }
+
+    public void Dispose()
+    {
+        _cartService.OnChange -= StateHasChanged;
     }
 }
