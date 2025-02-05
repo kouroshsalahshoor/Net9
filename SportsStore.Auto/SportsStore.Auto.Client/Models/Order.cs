@@ -22,5 +22,6 @@ namespace SportsStore.Auto.Client.Models
         [Required(ErrorMessage = "Please enter a country name")]
         public string? Country { get; set; }
         public bool GiftWrap { get; set; }
+        public bool Shipped { get; set; }
     }
 }
