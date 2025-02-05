@@ -13,8 +13,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Demos\" />
-  </ItemGroup>
-
 </Project>

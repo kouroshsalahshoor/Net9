@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SportsStore.Auto.Client.Pages;
+using SportsStore.Auto.Client.Services;
 using SportsStore.Auto.Components;
 using SportsStore.Auto.Components.Account;
 using SportsStore.Auto.Data;
@@ -74,6 +75,8 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https:/
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
+
+builder.Services.AddScoped<LocalStorageService>();
 
 var app = builder.Build();
 

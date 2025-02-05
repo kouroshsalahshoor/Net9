@@ -1,5 +1,7 @@
-﻿@page "/localstorageserver"
-@rendermode InteractiveServer
+﻿@page "/LocalStorageClient"
+@rendermode InteractiveWebAssembly
+
+@inject LocalStorageService _localStorageService
 
 <PageTitle>@_title</PageTitle>
 <h3>@_title</h3>
@@ -15,7 +17,7 @@ else
 }
 
 @code {
-    private string _title = "Localstorage Server";
+    private string _title = "LocalStorage Client";
 
     private int currentCount;
     private bool isConnected;
@@ -32,13 +34,15 @@ else
 
     private async Task LoadStateAsync()
     {
-        var result = await _protectedLocalStorage.GetAsync<int>("countserver");
-        currentCount = result.Success ? result.Value : 0;
+        currentCount = await _localStorageService.GetAsync<int>("countclient");
     }
 
     private async Task IncrementCount()
     {
         currentCount++;
-        await _protectedLocalStorage.SetAsync("countserver", currentCount);
+        await _localStorageService.SetAsync("countclient", currentCount);
+
+        // await _localStorageService.RemoveAsync("count");
+        // await _localStorageService.ClearAsync();
     }
 }
