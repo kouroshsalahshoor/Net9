@@ -2,15 +2,15 @@
 @rendermode InteractiveServer
 
 <span class="mx-3">
-    @if (_cartService.Lines.Count() > 0)
-    {
+    @* @if (_cartService.Lines.Count() > 0)
+    { *@
         <small class="navbar-text">
             <b>Your cart:</b>
             @_cartService.SummaryString
             @* @_cartService.Lines.Sum(x => x.Quantity) item(s)
             @_cartService.ComputeTotalValue().ToString("c") *@
         </small>
-    }
+    @* } *@
     <a class="btn btn-sm btn-light navbar-btn" href="/Cart">
         <i class="fa fa-shopping-cart"></i>
     </a>
@@ -18,7 +18,7 @@
 
 @code {
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         _cartService.OnChange += StateHasChanged;
     }

@@ -7,7 +7,7 @@ namespace SportsStore.Auto.Client.Services
         private string? _summaryString;
         public string? SummaryString
         {
-            get => _summaryString ?? string.Empty;
+            get => _summaryString ?? $"{Lines.Sum(x => x.Quantity)} item(s), Total: {ComputeTotalValue():C2}";
             set
             {
                 _summaryString = value;
