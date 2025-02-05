@@ -21,16 +21,19 @@
         <div class="bg-faded p-1">
             <h4>
                 @item.Name
-                <span class="badge rounded-pill bg-primary text-white" style="float:right">
+                <span class="badge rounded-pill text-bg-info">
+                    <small>@item.Category</small>
+                </span>
+                <span class="badge rounded-pill bg-primary text-white float-end">
                     <small>@item.Price.ToString("c")</small>
                 </span>
             </h4>
         </div>
         <div class="card-text p-1">
             @item.Description
-            <span class="badge text-bg-light" style="float:right">
-                <small>@item.Category</small>
-            </span>
+            <button class="btn btn-success btn-sm float-end">
+                Add To Cart
+            </button>
         </div>
     </div>
 }
@@ -89,7 +92,7 @@
         _page = Page < 1 ? 1 : Page;
 
         _url = string.IsNullOrEmpty(Category) ? "products" : $"products/{Category}";
-        
+
         var query = _efStoreRepository.Products.Where(p => Category == null || p.Category == Category);
         _total = await query.CountAsync();
         _pages = (int)Math.Ceiling((decimal)_total / _pageSize);

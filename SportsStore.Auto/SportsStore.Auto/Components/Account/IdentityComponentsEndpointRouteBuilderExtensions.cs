@@ -10,7 +10,7 @@ using SportsStore.Auto.Components.Account.Pages;
 using SportsStore.Auto.Components.Account.Pages.Manage;
 using SportsStore.Auto.Data;
 
-namespace Microsoft.AspNetCore.Routing
+namespace SportsStore.Auto.Components.Account
 {
     internal static class IdentityComponentsEndpointRouteBuilderExtensions
     {

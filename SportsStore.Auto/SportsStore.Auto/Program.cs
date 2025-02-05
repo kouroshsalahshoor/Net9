@@ -99,6 +99,7 @@ app.UseAntiforgery();
 app.MapStaticAssets();
 
 app.UseStaticFiles();
+
 app.MapControllers();
 app.MapControllerRoute("controllers",
  "controllers/{controller=Home}/{action=Index}/{id?}");

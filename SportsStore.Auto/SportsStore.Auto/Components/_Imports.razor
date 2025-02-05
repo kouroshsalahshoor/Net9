@@ -17,6 +17,9 @@
 @using Microsoft.EntityFrameworkCore
 @using SportsStore.Auto.Repository
 
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ProtectedLocalStorage _protectedLocalStorage
+
 @inherits OwningComponentBase<ApplicationDbContext>
 @inject IJSRuntime _js
 @inject NavigationManager _navigationManager
