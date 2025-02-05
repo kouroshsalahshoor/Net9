@@ -8,6 +8,7 @@ using SportsStore.Auto.Components.Account;
 using SportsStore.Auto.Components.Pages.Demos.StateContainer;
 using SportsStore.Auto.Data;
 using SportsStore.Auto.Repository;
+using SportsStore.Auto.Repository.IRepository;
 using SportsStore.Auto.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -77,6 +78,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https:/
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
+builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
 
 builder.Services.AddScoped<LocalStorageService>();
 builder.Services.AddScoped<CartService, ProtectedLocalStorageCartService>();

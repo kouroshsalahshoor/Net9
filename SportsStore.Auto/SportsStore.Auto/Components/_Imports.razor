@@ -16,6 +16,7 @@
 @using SportsStore.Auto.Data
 @using SportsStore.Auto.Repository
 @using SportsStore.Auto.Components.Pages.Cart
+@using SportsStore.Auto.Repository.IRepository
 @using SportsStore.Auto.Services
 
 @using Microsoft.EntityFrameworkCore
@@ -28,4 +29,5 @@
 @inject NavigationManager _navigationManager
 
 @inject IStoreRepository _efStoreRepository
+@inject IOrderRepository _orderRepository
 @inject CartService _cartService

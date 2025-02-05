@@ -44,29 +44,35 @@
 </table>
 <div class="text-center">
     <a class="btn btn-primary" href="@_returnUrl">Continue shopping</a>
-    <a class="btn btn-primary" href="checkout">
-        Checkout
-    </a>
+    @if (_cartService!.Lines.Any())
+    {
+        <a class="btn btn-primary mx-1" href="checkout">
+            Checkout
+        </a>
+    }
+    else
+    {
+        <p class="text-danger">Your cart is empty</p>
+    }
 </div>
 
 @code {
     private string _title = "Cart";
-    private bool _connected;
+    // private bool _connected = false;
 
-    // private Cart? _cart { get; set; }
     [SupplyParameterFromQuery(Name = "returnUrl")]
     private string _returnUrl { get; set; } = "/";
 
     protected override async Task OnInitializedAsync()
     {
         _returnUrl = _returnUrl ?? "products";
-        // _cartService.OnChange += StateHasChanged;
+        _cartService.OnChange += StateHasChanged;
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            _connected = true;
+            // _connected = true;
             await _cartService.Load();
             StateHasChanged();
         }

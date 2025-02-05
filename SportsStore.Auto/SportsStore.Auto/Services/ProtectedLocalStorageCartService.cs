@@ -12,7 +12,7 @@ namespace SportsStore.Auto.Services
             _protectedLocalStorage = protectedLocalStorage;
         }
 
-        public async Task Load()
+        public override async Task Load()
         {
             var result = await _protectedLocalStorage.GetAsync<List<CartLine>>("cart");
             Lines = result.Success ? result.Value! : new List<CartLine>();

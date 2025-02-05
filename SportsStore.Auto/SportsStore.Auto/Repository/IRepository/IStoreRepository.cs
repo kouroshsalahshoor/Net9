@@ -1,6 +1,6 @@
 ﻿using SportsStore.Auto.Client.Models;
 
-namespace SportsStore.Auto.Repository
+namespace SportsStore.Auto.Repository.IRepository
 {
     public interface IStoreRepository
     {

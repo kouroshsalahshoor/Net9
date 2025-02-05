@@ -22,6 +22,7 @@ namespace SportsStore.Auto.Services
             {
                 Lines.Add(new CartLine
                 {
+                    ProductId = product.Id,
                     Product = product,
                     Quantity = quantity
                 });

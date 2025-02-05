@@ -1,5 +1,6 @@
 ﻿using SportsStore.Auto.Client.Models;
 using SportsStore.Auto.Data;
+using SportsStore.Auto.Repository.IRepository;
 
 namespace SportsStore.Auto.Repository
 {

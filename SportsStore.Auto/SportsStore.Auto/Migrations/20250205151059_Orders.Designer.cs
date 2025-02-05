@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsStore.Auto.Data;
 
@@ -11,9 +12,11 @@ using SportsStore.Auto.Data;
 namespace SportsStore.Auto.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250205151059_Orders")]
+    partial class Orders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,7 +181,7 @@ namespace SportsStore.Auto.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartLine", (string)null);
+                    b.ToTable("CartLine");
                 });
 
             modelBuilder.Entity("SportsStore.Auto.Client.Models.Department", b =>
@@ -195,7 +198,7 @@ namespace SportsStore.Auto.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departments", (string)null);
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("SportsStore.Auto.Client.Models.Location", b =>
@@ -216,7 +219,7 @@ namespace SportsStore.Auto.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations", (string)null);
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("SportsStore.Auto.Client.Models.Order", b =>
@@ -261,7 +264,7 @@ namespace SportsStore.Auto.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("SportsStore.Auto.Client.Models.Person", b =>
@@ -292,7 +295,7 @@ namespace SportsStore.Auto.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("People", (string)null);
+                    b.ToTable("People");
                 });
 
             modelBuilder.Entity("SportsStore.Auto.Client.Models.Product", b =>
@@ -320,7 +323,7 @@ namespace SportsStore.Auto.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("SportsStore.Auto.Data.ApplicationUser", b =>

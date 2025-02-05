@@ -87,7 +87,7 @@
 
     private string _url = "products";
 
-    private bool _connected;
+    // private bool _connected = false;
     // private Cart? _cart { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -100,12 +100,12 @@
     {
         if (firstRender)
         {
-            _connected = true;
+            // _connected = true;
             await _cartService.Load();
             StateHasChanged();
         }
     }
-    
+
     override protected async Task OnParametersSetAsync()
     {
         _page = Page < 1 ? 1 : Page;
