@@ -3,6 +3,9 @@
 @page "/products/{category}"
 @page "/products/{category}/page/{page:int}"
 
+@* click did not work without it!!! *@
+@rendermode InteractiveServer
+
 <PageTitle>@_title</PageTitle>
 
 <div class="text-center">
@@ -31,7 +34,7 @@
         </div>
         <div class="card-text p-1">
             @item.Description
-            <button class="btn btn-success btn-sm float-end">
+            <button class="btn btn-success btn-sm float-end" @onclick="@(async() => await addToCart(item))">
                 Add To Cart
             </button>
         </div>
@@ -82,9 +85,26 @@
 
     private string _url = "products";
 
+    private bool _connected;
+    private Cart? _cart { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         _categories = await _efStoreRepository.Products.Select(p => p.Category).Distinct().ToListAsync();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _connected = true;
+            await LoadStateAsync();
+            StateHasChanged();
+        }
+    }
+    private async Task LoadStateAsync()
+    {
+        var result = await _protectedLocalStorage.GetAsync<Cart>("cart");
+        _cart = result.Success ? result.Value : new Cart();
     }
 
     override protected async Task OnParametersSetAsync()
@@ -97,5 +117,15 @@
         _total = await query.CountAsync();
         _pages = (int)Math.Ceiling((decimal)_total / _pageSize);
         _items = await query.OrderBy(p => p.Id).Skip((_page - 1) * _pageSize).Take(_pageSize).ToListAsync();
+    }
+
+    private async Task addToCart(Product product)
+    {
+        if (product != null)
+        {
+            _cart!.AddItem(product, 1);
+            await _protectedLocalStorage.SetAsync("cart", _cart);
+            _navigationManager.NavigateTo($"cart?returnUrl={_navigationManager.ToBaseRelativePath(_navigationManager.Uri)}");
+        }
     }
 }

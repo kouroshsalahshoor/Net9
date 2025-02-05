@@ -1,9 +1,10 @@
 ﻿@page "/cart"
+@rendermode InteractiveServer
 
 <PageTitle>@_title</PageTitle>
 <h3>@_title</h3>
 
-@* <table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>Quantity</th>
@@ -29,37 +30,41 @@
         <tr>
             <td colspan="3" class="text-right">Total:</td>
             <td class="text-right">
-                @Model?.Cart?.ComputeTotalValue().ToString("c")
+                @_cart?.ComputeTotalValue().ToString("c")
             </td>
         </tr>
     </tfoot>
 </table>
 <div class="text-center">
-    <a class="btn btn-primary" href="@Model?.ReturnUrl">Continue shopping</a>
+    <a class="btn btn-primary" href="@_returnUrl">Continue shopping</a>
 </div>
- *@
+
 @code {
     private string _title = "Cart";
+    private bool _connected;
 
     private Cart? _cart { get; set; }
+    [SupplyParameterFromQuery(Name = "returnUrl")]
     private string _returnUrl { get; set; } = "/";
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     _returnUrl = _returnUrl ?? "/";
-    //     Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
-    // }
-
-    // public IActionResult OnPost(long productId, string returnUrl)
-    // {
-    //     Product? product = repository.Products
-    //     .FirstOrDefault(p => p.ProductID == productId);
-    //     if (product != null)
-    //     {
-    //         Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
-    //         Cart.AddItem(product, 1);
-    //         HttpContext.Session.SetJson("cart", Cart);
-    //     }
-    //     return RedirectToPage(new { returnUrl = returnUrl });
-    // }
+    protected override async Task OnInitializedAsync()
+    {
+        _returnUrl = _returnUrl ?? "/";
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _connected = true;
+            
+            // _returnUrl = _returnUrl ?? "/";
+            await LoadStateAsync();
+            StateHasChanged();
+        }
+    }
+    private async Task LoadStateAsync()
+    {
+        var result = await _protectedLocalStorage.GetAsync<Cart>("cart");
+        _cart = result.Success ? result.Value : new Cart();
+    }
 }
