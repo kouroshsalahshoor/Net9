@@ -2,6 +2,7 @@
 @page "/admin"
 @rendermode InteractiveServer
 @inherits OwningComponentBase<IStoreRepository>
+@attribute [Authorize]
 
 <table class="table table-sm table-striped table-bordered">
     <thead>
@@ -30,6 +31,9 @@
                         <NavLink class="btn btn-warning btn-sm" href="@GetUpdateUrl(p.Id ?? 0)">
                             Edit
                         </NavLink>
+                        <button class="btn btn-danger btn-sm" @onclick="@(e => DeleteProduct(p))">
+                            Delete
+                        </button>
                     </td>
                 </tr>
             }
@@ -53,6 +57,14 @@
     public async Task UpdateData()
     {
         ProductData = await Repository.Products.ToListAsync();
+    }
+    public async Task DeleteProduct(Product p)
+    {
+        if (await _js.InvokeAsync<bool>("confirm", "Are you sure deleting this item?"))
+        {
+            Repository.DeleteProduct(p);
+            await UpdateData();
+        }
     }
     public string GetDetailsUrl(long id) => $"/admin/product/{id}";
     public string GetUpdateUrl(long id) => $"/admin/product/update/{id}";

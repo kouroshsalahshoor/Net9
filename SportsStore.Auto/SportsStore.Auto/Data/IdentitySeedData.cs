@@ -6,7 +6,7 @@ namespace SportsStore.Auto.Data
 {
     public class IdentitySeedData
     {
-        public static void CreateAdminAccount(IServiceProvider serviceProvider, IConfiguration configuration)
+        public static void EnsurePopulated(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             CreateAdminAccountAsync(serviceProvider, configuration).Wait();
         }

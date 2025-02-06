@@ -2,6 +2,7 @@
 @page "/admin/product/create"
 @inherits OwningComponentBase<IStoreRepository>
 @rendermode InteractiveServer
+@attribute [Authorize]
 
 <style>
     div.validation-message {

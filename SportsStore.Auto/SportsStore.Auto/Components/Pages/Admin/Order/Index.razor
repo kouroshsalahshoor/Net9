@@ -1,6 +1,7 @@
 ﻿@page "/admin/orders"
 @inherits OwningComponentBase<IOrderRepository>
 @rendermode InteractiveServer
+@attribute [Authorize]
 
 <_Table TableTitle="Unshipped Orders" Orders="UnshippedOrders" ButtonLabel="Ship" OrderSelected="ShipOrder" />
 <_Table TableTitle="Shipped Orders" Orders="ShippedOrders" ButtonLabel="Reset" OrderSelected="ResetOrder" />

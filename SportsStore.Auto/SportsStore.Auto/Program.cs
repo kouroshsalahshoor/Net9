@@ -125,6 +125,6 @@ app.MapAdditionalIdentityEndpoints();
 var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
 SeedData.EnsurePopulated(context);
 
-IdentitySeedData.CreateAdminAccount(app.Services, app.Configuration);
+IdentitySeedData.EnsurePopulated(app.Services, app.Configuration);
 
 app.Run();
