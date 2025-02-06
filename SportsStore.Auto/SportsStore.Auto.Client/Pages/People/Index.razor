@@ -9,7 +9,9 @@
             <th>Name</th>
             <th>Dept</th>
             <th>Location</th>
-            <th></th>
+            <th class="text-center">
+                <NavLink class="btn btn-sm btn-primary" href="wasm/person/create">Create</NavLink>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -27,16 +29,13 @@
                     <td>@p.Department?.Name</td>
                     <td>@p.Location?.City</td>
                     <td class="text-center">
-                        <NavLink class="btn btn-sm btn-info"
-                                 href="@GetDetailsUrl(p.Id)">
+                        <NavLink class="btn btn-sm btn-info" href="@GetDetailsUrl(p.Id)">
                             Details
                         </NavLink>
-                        <NavLink class="btn btn-sm btn-warning"
-                                 href="@GetEditUrl(p.Id)">
+                        <NavLink class="btn btn-sm btn-warning" href="@GetEditUrl(p.Id)">
                             Edit
                         </NavLink>
-                        <button class="btn btn-sm btn-danger"
-                                @onclick="@(() => HandleDelete(p))">
+                        <button class="btn btn-sm btn-danger" @onclick="@(() => HandleDelete(p))">
                             Delete
                         </button>
                     </td>
@@ -45,7 +44,6 @@
         }
     </tbody>
 </table>
-<NavLink class="btn btn-primary" href="wasm/person/create">Create</NavLink>
 @code {
     [Inject]
     public HttpClient? Http { get; set; }
@@ -66,7 +64,7 @@
     public async Task HandleDelete(Person p)
     {
         if (await _js.InvokeAsync<bool>("confirm", "Are you sure deleting this item?"))
-    {
+        {
             if (Http != null)
             {
                 HttpResponseMessage resp = await Http.DeleteAsync($"people/{p.Id}");

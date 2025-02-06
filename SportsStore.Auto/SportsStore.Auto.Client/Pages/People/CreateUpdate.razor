@@ -67,15 +67,12 @@
         {
             if (Mode == "Update")
             {
-                PersonData = await Http.GetFromJsonAsync<Person>($"people/{Id}")
-                ?? new();
+                PersonData = await Http.GetFromJsonAsync<Person>($"people/{Id}") ?? new();
             }
             var depts = await Http.GetFromJsonAsync<Department[]>("departments");
-            Departments = (depts ?? Array.Empty<Department>())
-            .ToDictionary(d => d.Name, d => d.Id);
+            Departments = (depts ?? Array.Empty<Department>()).ToDictionary(d => d.Name, d => d.Id);
             var locs = await Http.GetFromJsonAsync<Location[]>("locations");
-            Locations = (locs ?? Array.Empty<Location>())
-            .ToDictionary(l => $"{l.City}, {l.State}", l => l.Id);
+            Locations = (locs ?? Array.Empty<Location>()).ToDictionary(l => $"{l.City}, {l.State}", l => l.Id);
         }
     }
     public string Theme => Id == 0 ? "primary" : "warning";
