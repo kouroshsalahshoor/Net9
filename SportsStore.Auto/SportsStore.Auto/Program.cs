@@ -99,6 +99,15 @@ else
     app.UseHsts();
 }
 
+app.UseRequestLocalization(options =>
+{
+    options.AddSupportedCultures("sv-SE").AddSupportedUICultures("sv-SE").SetDefaultCulture("sv-SE");
+});
+//app.UseRequestLocalization(options =>
+//{
+//    options.AddSupportedCultures("en-US").AddSupportedUICultures("en-US").SetDefaultCulture("en-US");
+//});
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
