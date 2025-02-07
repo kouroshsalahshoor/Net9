@@ -81,7 +81,7 @@
 
     private async Task delete(Person p)
     {
-        if (await _js.InvokeAsync<bool>("confirm", "Are you sure deleting this item?"))
+        if (await _js.InvokeAsync<bool>("confirm", Constants.DeleteText))
         {
             if (_db != null)
             {

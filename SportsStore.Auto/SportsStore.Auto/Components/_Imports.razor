@@ -18,9 +18,11 @@
 @using SportsStore.Auto.Components.Pages.Cart
 @using SportsStore.Auto.Repository.IRepository
 @using SportsStore.Auto.Services
+@using SportsStore.Auto.Client.Utilities
 
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
 
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @inject ProtectedLocalStorage _protectedLocalStorage
@@ -28,6 +30,7 @@
 @inherits OwningComponentBase<ApplicationDbContext>
 @inject IJSRuntime _js
 @inject NavigationManager _navigationManager
+@inject UserManager<ApplicationUser> _userManager
 
 @inject IStoreRepository _efStoreRepository
 @inject IOrderRepository _orderRepository

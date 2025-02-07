@@ -1,48 +1,53 @@
 ﻿@page "/admin/users"
-@using Microsoft.AspNetCore.Identity
-@inject UserManager<ApplicationUser> _userManager
+@rendermode InteractiveServer
+@attribute [StreamRendering]
 @attribute [Authorize]
 
 <PageTitle>@_title</PageTitle>
+
 <h3 class="bg-primary text-white text-center p-2">@_title</h3>
 
 <table class="table table-sm table-bordered">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Roles</th>
-        <th class="text-center">
-            <a class="btn btn-sm btn-primary" href="admin/user/create">Create</a>
-        </th>
-    </tr>
-    @if (_vms.Count() == 0)
-    {
-        <tr><td colspan="5" class="text-center">No User Accounts</td></tr>
-    }
-    else
-    {
-        foreach (var vm in _vms ?? Enumerable.Empty<UserVM>())
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th class="text-center">
+                <a class="btn btn-sm btn-primary" href="admin/user/create">Create</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (_vms.Count() == 0)
         {
-            <tr>
-                <td>@vm.User.Id</td>
-                <td>@vm.User.UserName</td>
-                <td>@vm.User.Email</td>
-                <td>@vm.Role</td>
-                <td class="text-center">
-                    <a class="btn btn-sm btn-warning" href="admin/user/update/@vm.User.Id">Update</a>
-                    <button class="btn btn-sm btn-danger" @onclick="@(async ()=> await delete(vm.User))">
-                        Delete
-                    </button>
-                </td>
-            </tr>
+            <tr><td colspan="5" class="text-center">No User Accounts</td></tr>
         }
-    }
+        else
+        {
+            foreach (var vm in _vms ?? Enumerable.Empty<UserVM>())
+            {
+                <tr>
+                    <td>@vm.User.Id</td>
+                    <td>@vm.User.UserName</td>
+                    <td>@vm.User.Email</td>
+                    <td>@vm.Role</td>
+                    <td class="text-center">
+                        <a class="btn btn-sm btn-warning" href="admin/user/update/@vm.User.Id">Update</a>
+                        <button class="btn btn-sm btn-danger" @onclick="@(async ()=> await delete(vm.User))">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
 </table>
 
 @code {
     private string _title = "Users";
-    private List<UserVM> _vms { get; set; } = new ();
+    private List<UserVM> _vms { get; set; } = new();
     // public IEnumerable<ApplicationUser> _users { get; set; } = Enumerable.Empty<ApplicationUser>();
 
     override protected async Task OnInitializedAsync()
@@ -50,7 +55,8 @@
         await load();
     }
 
-    private async Task load(){
+    private async Task load()
+    {
         _vms = new();
         foreach (var user in await _userManager.Users.ToListAsync())
         {
@@ -65,8 +71,11 @@
 
     private async Task delete(ApplicationUser user)
     {
-        await _userManager.DeleteAsync(user);
-        await load();
+        if (await _js.InvokeAsync<bool>("confirm", Constants.DeleteText))
+        {
+            await _userManager.DeleteAsync(user);
+            await load();
+        }
     }
 
     private async Task<string> getRoles(ApplicationUser user)
