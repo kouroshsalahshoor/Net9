@@ -31,6 +31,7 @@
                     <td>@item.Members</td>
                     <td class="text-center">
                         <a class="btn btn-sm btn-warning" href="admin/role/update/@item.Role.Id">Update</a>
+                        <a class="btn btn-sm btn-info" href="admin/role/@item.Role.Id/members">Members</a>
                         <button class="btn btn-sm btn-danger" @onclick="@(async () => await delete(item.Role))">
                             Delete
                         </button>
