@@ -1,5 +1,6 @@
 ﻿@page "/admin/user/create"
-@* @page "/admin/user/update" *@
+@page "/admin/user/update/{id}"
+
 @using Microsoft.AspNetCore.Identity
 @using System.ComponentModel.DataAnnotations
 @using SportsStore.Auto.Client.Utilities
@@ -52,31 +53,74 @@
 </EditForm>
 
 @code {
+    [Parameter] public string Id { get; set; } = string.Empty;
+
     private string _title = "Create User";
     private List<string> _errors = new();
-    private CreateUserModel _model = new CreateUserModel();
+    private UserViewModel _model = new();
+    private ApplicationUser? _user;
+    private string? _userRole = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrEmpty(Id) == false)
+        {
+            _user = await _userManager.FindByIdAsync(Id);
+            if (_user is not null)
+            {
+                _model.UserName = _user.UserName!;
+                _model.Email = _user.Email!;
+                _userRole = (await _userManager.GetRolesAsync(_user)).FirstOrDefault() ?? string.Empty;
+                _model.Role = _userRole;
+            }
+        }
+    }
 
     private async Task submit()
     {
         _errors.Clear();
+        IdentityResult result = new();
 
-        var user = new ApplicationUser { UserName = _model.UserName, Email = _model.Email };
-        IdentityResult result = await _userManager.CreateAsync(user, _model.Password);
-        if (result.Succeeded)
+        if (string.IsNullOrEmpty(Id))
         {
-            result = await _userManager.AddToRoleAsync(user, _model.Role);
-            if (result.Succeeded)
+            _user = new ApplicationUser { UserName = _model.UserName, Email = _model.Email };
+            result = await _userManager.CreateAsync(_user, _model.Password);
+        }
+        else
+        {
+            _user!.UserName = _model.UserName;
+            _user.Email = _model.Email;
+
+            result = await _userManager.UpdateAsync(_user);
+            if (result.Succeeded && !string.IsNullOrEmpty(_model.Password))
             {
-                _navigationManager.NavigateTo("/admin/users");
+                await _userManager.RemovePasswordAsync(_user);
+                result = await _userManager.AddPasswordAsync(_user, _model.Password);
+            }
+
+            if (result.Succeeded && _model.Role != _userRole)
+            {
+                result = await _userManager.RemoveFromRoleAsync(_user, _userRole!);
             }
         }
+
+        if (result.Succeeded)
+        {
+            result = await _userManager.AddToRoleAsync(_user, _model.Role);
+        }
+
+        if (result.Succeeded)
+        {
+            _navigationManager.NavigateTo("/admin/users");
+        }
+
         foreach (IdentityError err in result.Errors)
         {
             _errors.Add(err.Description);
         }
     }
 
-    private class CreateUserModel
+    private class UserViewModel
     {
         [Required]
         public string UserName { get; set; } = string.Empty;
