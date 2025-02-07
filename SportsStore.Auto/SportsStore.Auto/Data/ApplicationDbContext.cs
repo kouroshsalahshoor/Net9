@@ -13,5 +13,17 @@ namespace SportsStore.Auto.Data
         public DbSet<Person> People => Set<Person>();
         public DbSet<Department> Departments => Set<Department>();
         public DbSet<Location> Locations => Set<Location>();
+        public DbSet<Category> Categories => Set<Category>();
+
+        override protected void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Category>().HasData(
+                new Category { Id = 1, Name = "Watersports" },
+                new Category { Id = 2, Name = "Soccer" },
+                new Category { Id = 3, Name = "Chess" }
+                );
+        }
     }
 }
