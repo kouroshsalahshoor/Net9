@@ -1,15 +1,12 @@
 ﻿@page "/admin/user/create"
 @page "/admin/user/update/{id}"
 
-@using Microsoft.AspNetCore.Identity
-@using System.ComponentModel.DataAnnotations
-@using SportsStore.Auto.Client.Utilities
-@inject UserManager<ApplicationUser> _userManager
 @attribute [Authorize]
 @rendermode InteractiveServer
+@attribute [StreamRendering]
 
 <PageTitle>@_title</PageTitle>
-<h3 class="bg-primary text-white text-center p-2">@_title</h3>
+<h3 class="bg-@(string.IsNullOrEmpty(Id) ? "primary" :"warning") text-white text-center p-2">@_title</h3>
 <EditForm Model="_model" OnValidSubmit="submit">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -55,14 +52,16 @@
 @code {
     [Parameter] public string? Id { get; set; } = string.Empty;
 
-    private string _title = "Create User";
+    private string? _title = string.Empty;
     private List<string> _errors = new();
     private UserViewModel _model = new();
     private ApplicationUser? _user;
     private string? _userRole = string.Empty;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
+        _title = string.IsNullOrEmpty(Id) ? "Create" : "Update" + " User";
+
         if (string.IsNullOrEmpty(Id) == false)
         {
             _user = await _userManager.FindByIdAsync(Id);
