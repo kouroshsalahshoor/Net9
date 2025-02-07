@@ -84,6 +84,8 @@ builder.Services.AddScoped<LocalStorageService>();
 builder.Services.AddScoped<CartService, ProtectedLocalStorageCartService>();
 builder.Services.AddScoped<StateContainer>();
 
+builder.Services.AddQuickGridEntityFrameworkAdapter();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

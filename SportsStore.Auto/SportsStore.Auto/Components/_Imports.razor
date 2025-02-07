@@ -27,12 +27,14 @@
 
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @inject ProtectedLocalStorage _protectedLocalStorage
+@using Microsoft.AspNetCore.Components.QuickGrid
 
 @inherits OwningComponentBase<ApplicationDbContext>
 @inject IJSRuntime _js
 @inject NavigationManager _navigationManager
 @inject UserManager<ApplicationUser> _userManager
 @inject RoleManager<IdentityRole> _roleManager
+@* @inject IDbContextFactory<ApplicationDbContext> _dbFactory *@
 
 @inject IStoreRepository _efStoreRepository
 @inject IOrderRepository _orderRepository
