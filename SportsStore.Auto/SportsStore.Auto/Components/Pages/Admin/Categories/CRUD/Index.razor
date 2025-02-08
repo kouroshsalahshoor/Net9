@@ -26,7 +26,7 @@
 <QuickGrid Class="table table-striped table-hover" Items="_filteredItems" Pagination="_pagination">
     <PropertyColumn Property="x => x.Name" Sortable="true" />
 
-    <TemplateColumn Context="item" Class="text-center">
+    <TemplateColumn Context="item" Class="text-center zero_width">
         <HeaderTemplate><a class="btn btn-sm btn-primary mx-auto" href="category/create" title="Create"><i class="bi bi-plus-square"></i></a></HeaderTemplate>
         <ChildContent>
             <a class="btn btn-sm btn-warning" href="@($"category/update/{item.Id}")" title="Update"><i class="bi bi-pencil-square"></i></a>
@@ -34,16 +34,33 @@
             <button class="btn btn-sm btn-danger" @onclick="@(async() => await delete(item))" title="Delete"><i class="bi bi-trash"></i></button>
         </ChildContent>
     </TemplateColumn>
+    <TemplateColumn Context="item" Class="text-center zero_width">
+        <HeaderTemplate><button class="btn btn-sm btn-primary mx-auto" @onclick="@(async() => await _createUpdateModal.Show())" title="Create Modal"><i class="bi bi-plus-square"></i></button></HeaderTemplate>
+        <ChildContent>
+            <button class="btn btn-sm btn-primary" @onclick="@(async() => await _IndexModal.Show())" title="List Modal"><i class="bi bi-window"></i></button>
+            <button class="btn btn-sm btn-warning" @onclick="@(async() => await _createUpdateModal.Show(item))" title="Update Modal"><i class="bi bi-pencil-square"></i></button>
+            <button class="btn btn-sm btn-info" @onclick="@(async() => await _DetailsModal.Show(item))" title="Details Modal"><i class="bi bi-info-square"></i></button>
+            <button class="btn btn-sm btn-danger" title="Delete Modal"><i class="bi bi-trash"></i></button>
+        </ChildContent>
+    </TemplateColumn>
 </QuickGrid>
 <Paginator State="_pagination" />
+
+<SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._Index @ref="_IndexModal" Items="@_filteredItems" />
+<SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._Details @ref="_DetailsModal" />
+<SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._CreateUpdate OnClose="createUpdateModalClosed" @ref="_createUpdateModal" />
 
 @code {
     private ApplicationDbContext _db = default!;
     private string _title = "Categories";
 
     private string _filter = string.Empty;
-    private IQueryable<Category> _filteredItems => _db.Categories.Where(m => m.Name!.Contains(_filter));
+    private IQueryable<Category> _filteredItems => _db.Categories.Where(m => m.Name!.Contains(_filter)).OrderByDescending(x=>x.Id);
     private PaginationState _pagination = new PaginationState { ItemsPerPage = 2 };
+
+    private SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._Index _IndexModal = default!;
+    private SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._Details _DetailsModal = default!;
+    private SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._CreateUpdate _createUpdateModal = default!;
 
     protected override void OnInitialized()
     {
@@ -60,6 +77,10 @@
                 await _db.SaveChangesAsync();
             }
         }
+    }
+
+    private async Task createUpdateModalClosed()
+    {
     }
 
     public async ValueTask DisposeAsync() => await _db.DisposeAsync();

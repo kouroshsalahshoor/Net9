@@ -1,0 +1,87 @@
+﻿@* @implements IAsyncDisposable *@
+
+@if (_show)
+{
+    <div class="modal fade show" id="staticBackdropLive" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLiveLabel" style="display: block;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLiveLabel">@_title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="close" title="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <p>
+                        <div class="input-group mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="search" placeholder="" @bind="_filter" @bind:event="oninput">
+                                <label for="search">Search</label>
+                            </div>
+                            <span class="input-group-text bg-warning text-light px-3"><i class="bi bi-search"></i></span>
+                        </div>
+                    </p>
+
+                    <QuickGrid Class="table table-striped table-hover" Items="_filteredItems" Pagination="_pagination">
+                        <PropertyColumn Property="x => x.Name" Sortable="true" />
+
+                        <TemplateColumn Context="item" Class="text-center zero_width">
+                            <HeaderTemplate><button class="btn btn-sm btn-primary mx-auto" @onclick="@(async() => await _createUpdateModal.Show())" title="Create Modal"><i class="bi bi-plus-square"></i></button></HeaderTemplate>
+                            <ChildContent>
+                                <button class="btn btn-sm btn-warning" @onclick="@(async() => await _createUpdateModal.Show(item))" title="Update Modal"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn btn-sm btn-info" @onclick="@(async() => await _DetailsModal.Show(item))" title="Details Modal"><i class="bi bi-info-square"></i></button>
+                                <button class="btn btn-sm btn-danger" title="Delete Modal"><i class="bi bi-trash"></i></button>
+                            </ChildContent>
+                        </TemplateColumn>
+                    </QuickGrid>
+                    <Paginator State="_pagination" />
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" @onclick="close" title="Close">Close</button>
+                    @* <button type="button" class="btn btn-primary" title="Save">Save</button> *@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._Details @ref="_DetailsModal" />
+    <SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._CreateUpdate OnClose="createUpdateModalClosed" @ref="_createUpdateModal" />
+}
+
+@code {
+    [Parameter] public IQueryable<Category> Items { get; set; } = default!;
+
+    private bool _show { get; set; } = false;
+    private string _title = "Categories";
+
+    protected override Task OnParametersSetAsync()
+    {
+        // _filteredItems = Items.Where(m => m.Name!.Contains(_filter)).AsQueryable();
+        return base.OnParametersSetAsync();
+    }
+
+    private string _filter = string.Empty;
+    private IQueryable<Category> _filteredItems => Items.Where(m => m.Name!.Contains(_filter)).AsQueryable();
+    private PaginationState _pagination = new PaginationState { ItemsPerPage = 2 };
+
+    private SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._Details _DetailsModal = default!;
+    private SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._CreateUpdate _createUpdateModal = default!;
+
+    public async Task Show()
+    {
+        _show = true;
+        StateHasChanged();
+    }
+
+    private async Task close()
+    {
+        _show = false;
+        StateHasChanged();
+    }
+
+    private async Task createUpdateModalClosed()
+    {
+    }
+
+    // public async ValueTask DisposeAsync() => ;
+}
