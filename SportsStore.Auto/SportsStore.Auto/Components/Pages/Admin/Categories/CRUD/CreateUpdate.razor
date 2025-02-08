@@ -6,7 +6,9 @@
 @attribute [StreamRendering]
 
 <PageTitle>@_title</PageTitle>
-<h3 class="text-center p-1 text-light bg-@(Id == 0 ? "primary" : "warning")">@_title</h3>
+@* <h3 class="text-center p-1 text-light bg-@(Id == 0 ? "primary" : "warning")">@_title</h3> *@
+<h2>@_title</h2>
+<hr />
 
 @if (_model is null)
 {
