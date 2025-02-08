@@ -1,0 +1,54 @@
+﻿@page "/category/create"
+@page "/category/update/{id:int}"
+
+@* @attribute [Authorize] *@
+@rendermode InteractiveServer
+@attribute [StreamRendering]
+
+<PageTitle>@_title</PageTitle>
+<h3 class="text-light bg-@(Id == 0 ? "primary" : "warning")">@_title</h3>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="_model" OnValidSubmit="AddCategory" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert" />
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <InputText id="name" @bind-Value="_model.Name" class="form-control" aria-required="true" />
+                <ValidationMessage For="() => _model.Name" class="text-danger" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/categories">Back to List</a>
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Category _model { get; set; } = new();
+
+    private string _title = default!;
+
+    protected override Task OnParametersSetAsync()
+    {
+        _title = Id == 0 ? "Create" : "Update";
+
+        return base.OnParametersSetAsync();
+    }
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddCategory()
+    {
+        using var db = _dbFactory.CreateDbContext();
+        db.Categories.Add(_model);
+        await db.SaveChangesAsync();
+        _navigationManager.NavigateTo("/categories");
+    }
+}

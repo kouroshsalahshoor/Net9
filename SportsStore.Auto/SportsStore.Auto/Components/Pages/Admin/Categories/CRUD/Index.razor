@@ -1,0 +1,60 @@
+﻿@page "/categories"
+@implements IAsyncDisposable
+
+@* @attribute [Authorize] *@
+@rendermode InteractiveServer
+@attribute [StreamRendering]
+
+<PageTitle>@_title</PageTitle>
+<h3>@_title</h3>
+
+<p>
+    <div class="form-floating">
+        <input type="text" class="form-control" id="search" placeholder="search" @bind="_filter" @bind:event="oninput">
+        <label for="search">Search</label>
+    </div>
+    @* <input class="form-control" type="search" @bind="_filter" @bind:event="oninput" /> *@
+</p>
+
+@* https://aspnet.github.io/quickgridsamples/ *@
+@* https://learn.microsoft.com/en-us/aspnet/core/blazor/components/quickgrid?view=aspnetcore-9.0&tabs=visual-studio *@
+
+@* <QuickGrid Class="table table-striped table-hover" Items="_db.Categories" Pagination="_pagination"> *@
+<QuickGrid Class="table table-striped table-hover" Items="_filteredItems" Pagination="_pagination">
+    <PropertyColumn Property="x => x.Name" Sortable="true" />
+
+    <TemplateColumn Context="item" Class="text-center">
+        <HeaderTemplate><a class="btn btn-sm btn-primary mx-auto" href="category/create" title="Create"><i class="bi bi-plus-square"></i></a></HeaderTemplate>
+        <ChildContent>
+            <a class="btn btn-sm btn-warning" href="@($"category/update/id={item.Id}")" title="Update"><i class="bi bi-pencil-square"></i></a>
+            <a class="btn btn-sm btn-info" href="@($"category/id={item.Id}")" title="Details"><i class="bi bi-info-square"></i></a>
+            <button class="btn btn-sm btn-danger" @onclick="@(async() => await delete(item))" title="Delete"><i class="bi bi-trash"></i></button>
+        </ChildContent>
+    </TemplateColumn>
+</QuickGrid>
+<Paginator State="_pagination" />
+
+@code {
+    private ApplicationDbContext _db = default!;
+    private string _title = "Categories";
+
+    private string _filter = string.Empty;
+    private IQueryable<Category> _filteredItems => _db.Categories.Where(m => m.Name!.Contains(_filter));
+    private PaginationState _pagination = new PaginationState { ItemsPerPage = 2 };
+
+    protected override void OnInitialized()
+    {
+        _db = _dbFactory.CreateDbContext();
+    }
+
+    private async ValueTask delete(Category model)
+    {
+        if (model is not null)
+        {
+            _db.Categories.Remove(model);
+            await _db.SaveChangesAsync();
+        }
+    }
+
+    public async ValueTask DisposeAsync() => await _db.DisposeAsync();
+}
