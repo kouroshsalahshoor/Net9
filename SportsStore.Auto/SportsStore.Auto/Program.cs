@@ -88,7 +88,7 @@ builder.Services.AddQuickGridEntityFrameworkAdapter();
 
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString),
-    ServiceLifetime.Scoped);
+    ServiceLifetime.Transient);
 
 var app = builder.Build();
 

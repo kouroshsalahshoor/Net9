@@ -96,6 +96,10 @@ else
         try
         {
             await db.SaveChangesAsync();
+
+            // await _js.ToastrSuccess("Saved successfully");
+            // await Task.Delay(100);
+            
             _navigationManager.NavigateTo("/categories");
         }
         catch (DbUpdateConcurrencyException e)

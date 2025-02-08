@@ -62,7 +62,7 @@
     private SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._Details _DetailsModal = default!;
     private SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._CreateUpdate _createUpdateModal = default!;
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
         _db = _dbFactory.CreateDbContext();
     }
@@ -73,8 +73,11 @@
         {
             if (model is not null)
             {
-                _db.Categories.Remove(model);
-                await _db.SaveChangesAsync();
+                using var db = _dbFactory.CreateDbContext();
+                db.Categories.Remove(model);
+                await db.SaveChangesAsync();
+
+                await _js.ToastrSuccess("Deleted successfully");
             }
         }
     }
