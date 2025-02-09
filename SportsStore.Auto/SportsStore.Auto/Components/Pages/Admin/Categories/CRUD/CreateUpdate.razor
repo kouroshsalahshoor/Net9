@@ -3,7 +3,7 @@
 
 @* @attribute [Authorize] *@
 @rendermode InteractiveServer
-@attribute [StreamRendering]
+@* @attribute [StreamRendering] *@
 
 <PageTitle>@_title</PageTitle>
 @* <h3 class="text-center p-1 text-light bg-@(Id == 0 ? "primary" : "warning")">@_title</h3> *@
@@ -97,10 +97,10 @@ else
         {
             await db.SaveChangesAsync();
 
-            // await _js.ToastrSuccess("Saved successfully");
-            // await Task.Delay(100);
+            await _js.ToastrSuccess("Saved successfully");
+            await Task.Delay(500);
             
-            _navigationManager.NavigateTo("/categories");
+            _navigationManager.NavigateTo("categories");
         }
         catch (DbUpdateConcurrencyException e)
         {
