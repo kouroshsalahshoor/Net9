@@ -16,6 +16,7 @@ namespace SportsStore.Auto.Client.Models
         public decimal Price { get; set; }
         [Required(ErrorMessage = "Please specify a {0}")]
         public string Category { get; set; } = string.Empty;
+        public string? Tag { get; set; }
         public string? ImageUrl { get; set; }
     }
 }

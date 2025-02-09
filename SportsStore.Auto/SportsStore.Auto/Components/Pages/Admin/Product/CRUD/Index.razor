@@ -16,7 +16,7 @@
             <th>Price</th>
             <th>Image</th>
             <td class="text-center">
-                <NavLink class="btn btn-sm btn-primary" href="/admin/product/create" title="Create"><i class="bi bi-plus-square"></i></NavLink>
+                <NavLink class="btn btn-sm btn-primary" href="/admin/product/create" title="Create"><i class="bi bi-plus-square"></i> Create</NavLink>
             </td>
         </tr>
     </thead>
@@ -32,9 +32,9 @@
                     <td>@item.Price.ToString("c")</td>
                     <td>@item.ImageUrl</td>
                     <td class="text-center zero_width">
-                        <NavLink class="btn btn-info btn-sm" href="@($"/admin/product/{item.Id}")" title="Details"><i class="bi bi-info-square"></i></NavLink>
-                        <NavLink class="btn btn-warning btn-sm" href="@($"/admin/product/update/{item.Id}")" title="Update"><i class="bi bi-pencil-square"></i></NavLink>
-                        <button class="btn btn-danger btn-sm" @onclick="@(e => delete(item))" title="Delete"><i class="bi bi-trash"></i></button>
+                        <NavLink class="btn btn-info btn-sm" href="@($"/admin/product/{item.Id}")" title="Details"><i class="bi bi-info-square"></i> Details</NavLink>
+                        <NavLink class="btn btn-warning btn-sm" href="@($"/admin/product/update/{item.Id}")" title="Update"><i class="bi bi-pencil-square"></i> Update</NavLink>
+                        <button class="btn btn-danger btn-sm" @onclick="@(e => delete(item))" title="Delete"><i class="bi bi-trash"></i> Delete</button>
                     </td>
                 </tr>
             }
@@ -47,7 +47,6 @@
         }
     </tbody>
 </table>
-<NavLink class="btn btn-primary" href="/admin/product/create">Create</NavLink>
 @code {
     private ApplicationDbContext _db => Service;
     
@@ -71,6 +70,4 @@
             await load();
         }
     }
-    public string GetDetailsUrl(long id) => $"/admin/product/{id}";
-    public string GetUpdateUrl(long id) => $"/admin/product/update/{id}";
 }
