@@ -3,58 +3,65 @@
 @rendermode InteractiveServer
 @attribute [Authorize]
 
+@inject IWebHostEnvironment _env
+
 <PageTitle>@_title</PageTitle>
 <h2>@_title</h2>
 <hr />
 
-<table class="table table-sm table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Image</th>
-            <td class="text-center">
-                <NavLink class="btn btn-sm btn-primary" href="/admin/product/create" title="Create"><i class="bi bi-plus-square"></i> Create</NavLink>
-            </td>
-        </tr>
-    </thead>
-    <tbody>
-        @if (_items.Any())
-        {
-            @foreach (var item in _items)
+<div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered table-hover align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Image</th>
+                <td class="text-center">
+                    <NavLink class="btn btn-sm btn-primary" href="/admin/product/create" title="Create"><i class="bi bi-plus-square"></i> Create</NavLink>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (_items.Any())
+            {
+                @foreach (var item in _items)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@item.Category</td>
+                        <td>@item.Price.ToString("c")</td>
+                        <td class="text-center" style="width:100px;"><img src="@getImageUrl(item.Id)" alt="@item.Name" class="img-thumbnail" style="width:100px" /></td>
+                        <td class="text-center zero_width">
+                            <NavLink class="btn btn-info btn-sm" href="@($"/admin/product/{item.Id}")" title="Details"><i class="bi bi-info-square"></i> Details</NavLink>
+                            <NavLink class="btn btn-warning btn-sm" href="@($"/admin/product/update/{item.Id}")" title="Update"><i class="bi bi-pencil-square"></i> Update</NavLink>
+                            <button class="btn btn-danger btn-sm" @onclick="@(e => delete(item))" title="Delete"><i class="bi bi-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Name</td>
-                    <td>@item.Category</td>
-                    <td>@item.Price.ToString("c")</td>
-                    <td>@item.ImageUrl</td>
-                    <td class="text-center zero_width">
-                        <NavLink class="btn btn-info btn-sm" href="@($"/admin/product/{item.Id}")" title="Details"><i class="bi bi-info-square"></i> Details</NavLink>
-                        <NavLink class="btn btn-warning btn-sm" href="@($"/admin/product/update/{item.Id}")" title="Update"><i class="bi bi-pencil-square"></i> Update</NavLink>
-                        <button class="btn btn-danger btn-sm" @onclick="@(e => delete(item))" title="Delete"><i class="bi bi-trash"></i> Delete</button>
-                    </td>
+                    <td colspan="6" class="text-center">No Products</td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="6" class="text-center">No Products</td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 @code {
     private ApplicationDbContext _db => Service;
-    
+
     private string _title = "Products";
     private IEnumerable<Product> _items { get; set; } = Enumerable.Empty<Product>();
 
+    private string _dir = string.Empty;
+
     protected async override Task OnInitializedAsync()
     {
+        _dir = Path.Combine(_env.WebRootPath, "images", "products");
         await load();
     }
     private async Task load()
@@ -69,5 +76,20 @@
             await _db.SaveChangesAsync();
             await load();
         }
+    }
+
+    private string? getImageUrl(long? id)
+    {
+        var productDir = Path.Combine(_dir, id.ToString()!);
+        if (Directory.Exists(productDir))
+        {
+            var files = Directory.GetFiles(productDir);
+            if (files is not null && files.FirstOrDefault() is not null)
+            {
+                var fileName = new FileInfo(files.FirstOrDefault()!).Name;
+                return $"images/products/{id.ToString()}/{fileName}";
+            }
+        }
+        return $"images/default.png";
     }
 }

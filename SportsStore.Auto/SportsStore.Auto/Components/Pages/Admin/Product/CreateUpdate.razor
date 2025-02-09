@@ -149,7 +149,7 @@
         {
             var fileInfo = new FileInfo(file.Name);
 
-            var newFileName = $"{Guid.NewGuid()}.{fileInfo.Extension}";
+            var newFileName = $"{Guid.NewGuid()}{fileInfo.Extension}";
             var newFilePath = Path.Combine(productDir, newFileName);
 
             await using var fs = new FileStream(newFilePath, FileMode.Create);
