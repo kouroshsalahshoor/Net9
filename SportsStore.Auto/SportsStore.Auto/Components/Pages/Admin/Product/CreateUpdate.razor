@@ -39,8 +39,8 @@
         <ValidationMessage For="@(() => _model.Price)" />
     </div>
     <div class="mt-1">
-        <button type="submit" class="btn btn-@(Id == 0 ? "primary" : "warning")">Save</button>
-        <NavLink class="btn btn-light" href="/admin/products">Cancel</NavLink>
+        <button type="submit" class="btn btn-@(Id == 0 ? "primary" : "warning")" title="Save"><i class="bi bi-floppy"></i> Save</button>
+        <NavLink class="btn btn-light" href="/admin/products" title="Back to List"><i class="bi bi-list"></i>Back to List</NavLink>
     </div>
 </EditForm>
 
