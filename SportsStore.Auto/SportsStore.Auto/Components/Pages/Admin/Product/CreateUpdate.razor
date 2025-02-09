@@ -49,6 +49,25 @@
         <InputFile class="form-control" id="Image" OnChange="loadFiles" multiple accept="image/*" />
         <label for="Image">Upload Image</label>
         @* <ValidationMessage For="@(() => _model.Image)" /> *@
+
+        @if (_productFileInfos!.Any())
+        {
+            <div class="row mt-2">
+                @foreach (var fileInfo in _productFileInfos!)
+                {
+                    <div class="col-md-2">
+                        <div class="row text-center">
+                            <div class="col-md-12">
+                                <a class="btn btn-danger btn-sm" @onclick="@(async() => await deleteImage(fileInfo))" title="Delete"><i class="bi bi-trash"></i> Delete</a>
+                            </div>
+                            <div class="col-md-12">
+                                <img src="@($"/images/products/{_model.Id}/{fileInfo.Name}")" alt="@_model.Name" class="img-thumbnail" style="width:100%" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
     </div>
     <div class="mt-1">
         <button type="submit" class="btn btn-@(Id == 0 ? "primary" : "warning")" title="Save"><i class="bi bi-floppy"></i> Save</button>
@@ -65,7 +84,8 @@
 
     private bool _loading;
     private string _dir = string.Empty;
-    private IReadOnlyList<IBrowserFile>? _files;
+    private IReadOnlyList<IBrowserFile>? _uploadingFiles;
+    private List<FileInfo>? _productFileInfos = new();
 
     protected override Task OnInitializedAsync()
     {
@@ -79,14 +99,16 @@
         return base.OnInitializedAsync();
     }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         _title = Id == 0 ? "Create" : "Update";
         if (Id != 0)
         {
             _model = _db.Products.FirstOrDefault(p => p.Id == Id) ?? new();
+            await getAllImagesInDir();
         }
     }
+
     private async Task submit()
     {
         if (Id == 0)
@@ -100,7 +122,7 @@
 
         await _db.SaveChangesAsync();
 
-        if (_files!.Any())
+        if (_uploadingFiles is not null && _uploadingFiles!.Any())
         {
             await uploadFiles();
         }
@@ -110,20 +132,20 @@
 
     private void loadFiles(InputFileChangeEventArgs e)
     {
-        _files = e.GetMultipleFiles();
+        _uploadingFiles = e.GetMultipleFiles();
     }
 
     private async Task uploadFiles()
     {
         _loading = true;
-        
+
         var productDir = Path.Combine(_dir, _model.Id.ToString()!);
         if (Directory.Exists(productDir) == false)
         {
             Directory.CreateDirectory(productDir);
         }
-        
-        foreach (var file in _files!)
+
+        foreach (var file in _uploadingFiles!)
         {
             var fileInfo = new FileInfo(file.Name);
 
@@ -135,5 +157,35 @@
 
         }
         _loading = false;
+    }
+
+    private async Task getAllImagesInDir()
+    {
+        if (_model.Id > 0)
+        {
+            var productDir = Path.Combine(_dir, _model.Id.ToString()!);
+            if (Directory.Exists(productDir))
+            {
+                var files = Directory.GetFiles(productDir);
+                foreach (var file in files)
+                {
+                    _productFileInfos?.Add(new FileInfo(file));
+                }
+            }
+        }
+    }
+
+    private async Task deleteImage(FileInfo fileInfo)
+    {
+        if (await _js.InvokeAsync<bool>("confirm", Constants.DeleteText))
+        {
+            // $"/images/products/{_model.Id}/{fileInfo.Name}
+            var filePath = Path.Combine(_dir, _model.Id.ToString()!, fileInfo.Name);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+                _productFileInfos?.Remove(fileInfo);
+            }
+        }
     }
 }
