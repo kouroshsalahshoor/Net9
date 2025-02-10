@@ -38,6 +38,7 @@
                             <NavLink class="btn btn-info btn-sm" href="@($"/admin/product/{item.Id}")" title="Details"><i class="bi bi-info-square"></i> Details</NavLink>
                             <NavLink class="btn btn-warning btn-sm" href="@($"/admin/product/update/{item.Id}")" title="Update"><i class="bi bi-pencil-square"></i> Update</NavLink>
                             <button class="btn btn-danger btn-sm" @onclick="@(e => delete(item))" title="Delete"><i class="bi bi-trash"></i> Delete</button>
+                            <button class="btn btn-primary btn-sm" @onclick="@(() => _captureImageModal.Show())" title="Capture"><i class="bi bi-camera"></i> Capture</button>
                         </td>
                     </tr>
                 }
@@ -51,6 +52,9 @@
         </tbody>
     </table>
 </div>
+
+<_CaptureImage @ref="_captureImageModal" />
+
 @code {
     private ApplicationDbContext _db => Service;
 
@@ -58,6 +62,8 @@
     private IEnumerable<Product> _items { get; set; } = Enumerable.Empty<Product>();
 
     private string _dir = string.Empty;
+
+    private _CaptureImage _captureImageModal = null!;
 
     protected async override Task OnInitializedAsync()
     {

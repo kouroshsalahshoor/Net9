@@ -1,4 +1,4 @@
-﻿@page "/category/{id:int}"
+﻿@page "/admin/category/{id:int}"
 
 @* @attribute [Authorize] *@
 @rendermode InteractiveServer
@@ -25,8 +25,8 @@
             <dd class="col-sm-10">@_model.Name</dd>
         </dl>
         <div>
-            <a class="btn btn-warning" href="@($"/category/update/{_model.Id}")">Edit</a>
-            <a class="btn btn-light" href="@($"/categories")">Back to List</a>
+            <a class="btn btn-warning" href="@($"/admin/category/update/{_model.Id}")">Edit</a>
+            <a class="btn btn-light" href="@($"/admin/categories")">Back to List</a>
         </div>
     }
 </div>

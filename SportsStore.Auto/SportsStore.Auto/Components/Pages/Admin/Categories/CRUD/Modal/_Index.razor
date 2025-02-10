@@ -28,7 +28,7 @@
                             <HeaderTemplate><button class="btn btn-sm btn-primary mx-auto" @onclick="@(async() => await _createUpdateModal.Show())" title="Create Modal"><i class="bi bi-plus-square"></i></button></HeaderTemplate>
                             <ChildContent>
                                 <button class="btn btn-sm btn-warning" @onclick="@(async() => await _createUpdateModal.Show(item))" title="Update Modal"><i class="bi bi-pencil-square"></i></button>
-                                <button class="btn btn-sm btn-info" @onclick="@(async() => await _DetailsModal.Show(item))" title="Details Modal"><i class="bi bi-info-square"></i></button>
+                                @* <button class="btn btn-sm btn-info" @onclick="@(async() => await _DetailsModal.Show(item))" title="Details Modal"><i class="bi bi-info-square"></i></button> *@
                                 <button class="btn btn-sm btn-danger" title="Delete Modal"><i class="bi bi-trash"></i></button>
                             </ChildContent>
                         </TemplateColumn>
@@ -50,6 +50,7 @@
 
 @code {
     [Parameter] public IQueryable<Category> Items { get; set; } = default!;
+    [Parameter] public EventCallback OnClose { get; set; }
 
     private bool _show { get; set; } = false;
     private string _title = "Categories";
@@ -75,6 +76,7 @@
 
     private async Task close()
     {
+        await OnClose.InvokeAsync();
         _show = false;
         StateHasChanged();
     }

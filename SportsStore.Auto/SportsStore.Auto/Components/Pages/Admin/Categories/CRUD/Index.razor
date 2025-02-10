@@ -1,5 +1,5 @@
-﻿@page "/categories"
-@implements IAsyncDisposable
+﻿@page "/admin/categories"
+@* @implements IAsyncDisposable *@
 
 @* @attribute [Authorize] *@
 @rendermode InteractiveServer
@@ -27,10 +27,10 @@
     <PropertyColumn Property="x => x.Name" Sortable="true" />
 
     <TemplateColumn Context="item" Class="text-center zero_width">
-        <HeaderTemplate><a class="btn btn-sm btn-primary mx-auto" href="category/create" title="Create"><i class="bi bi-plus-square"></i></a></HeaderTemplate>
+        <HeaderTemplate><a class="btn btn-sm btn-primary mx-auto" href="admin/category/create" title="Create"><i class="bi bi-plus-square"></i></a></HeaderTemplate>
         <ChildContent>
-            <a class="btn btn-sm btn-warning" href="@($"category/update/{item.Id}")" title="Update"><i class="bi bi-pencil-square"></i></a>
-            <a class="btn btn-sm btn-info" href="@($"category/{item.Id}")" title="Details"><i class="bi bi-info-square"></i></a>
+            <a class="btn btn-sm btn-warning" href="@($"admin/category/update/{item.Id}")" title="Update"><i class="bi bi-pencil-square"></i></a>
+            <a class="btn btn-sm btn-info" href="@($"admin/category/{item.Id}")" title="Details"><i class="bi bi-info-square"></i></a>
             <button class="btn btn-sm btn-danger" @onclick="@(async() => await delete(item))" title="Delete"><i class="bi bi-trash"></i></button>
         </ChildContent>
     </TemplateColumn>
@@ -46,12 +46,13 @@
 </QuickGrid>
 <Paginator State="_pagination" />
 
-<SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._Index @ref="_IndexModal" Items="@_filteredItems" />
+<SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._Index @ref="_IndexModal" Items="@_filteredItems" OnClose="indexModalClosed" />
 <SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._Details @ref="_DetailsModal" />
 <SportsStore.Auto.Components.Pages.Admin.Categories.CRUD.Modal._CreateUpdate OnClose="createUpdateModalClosed" @ref="_createUpdateModal" />
 
 @code {
-    private ApplicationDbContext _db = default!;
+    private ApplicationDbContext _db => Service;
+    // private ApplicationDbContext _db = default!;
     private string _title = "Categories";
 
     private string _filter = string.Empty;
@@ -64,7 +65,11 @@
 
     protected override async void OnInitialized()
     {
-        _db = _dbFactory.CreateDbContext();
+        // _db = _dbFactory.CreateDbContext();
+    }
+
+    private async Task load(){
+        StateHasChanged();
     }
 
     private async ValueTask delete(Category model)
@@ -73,18 +78,22 @@
         {
             if (model is not null)
             {
-                using var db = _dbFactory.CreateDbContext();
-                db.Categories.Remove(model);
-                await db.SaveChangesAsync();
+                // using var db = _dbFactory.CreateDbContext();
+                // db.Categories.Remove(model);
+                // await db.SaveChangesAsync();
 
                 await _js.ToastrSuccess("Deleted successfully");
             }
         }
     }
 
+    private async Task indexModalClosed()
+    {
+
+    }
     private async Task createUpdateModalClosed()
     {
     }
 
-    public async ValueTask DisposeAsync() => await _db.DisposeAsync();
+    // public async ValueTask DisposeAsync() => await _db.DisposeAsync();
 }
