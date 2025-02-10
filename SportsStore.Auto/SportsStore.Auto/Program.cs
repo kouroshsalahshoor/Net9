@@ -18,7 +18,7 @@ builder.Services.AddRazorPages();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents()
+    .AddInteractiveServerComponents().AddHubOptions(o => o.MaximumReceiveMessageSize = 100_000_000)
     .AddInteractiveWebAssemblyComponents()
     .AddAuthenticationStateSerialization();
 

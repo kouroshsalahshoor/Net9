@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SportsStore.Auto.Client\SportsStore.Auto.Client.csproj" />
+    <PackageReference Include="BlazorCameraStreamer" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="9.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.1" />
